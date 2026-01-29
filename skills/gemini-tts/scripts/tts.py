@@ -3,9 +3,10 @@
 
 Usage:
     python tts.py "Hello, world!"
-    python tts.py "Welcome!" --voice Puck --output welcome.wav
-    python tts.py "Conversation text" --multi --speakers "Joe:Kore,Jane:Puck"
+    python tts.py "Welcome!" --voice Puck --output welcome
+    python tts.py "Conversation text" --speakers "Joe:Kore,Jane:Puck"
     python tts.py "Long text" --stream
+    python tts.py "Custom folder" --output-dir ./my-audio/
 
 Requirements:
     pip install google-genai
@@ -15,6 +16,8 @@ import argparse
 import os
 import sys
 import wave
+from pathlib import Path
+from datetime import datetime
 
 # Load .env file if present
 try:
@@ -53,20 +56,24 @@ def save_wav(filename: str, audio_data: bytes, rate: int = 24000):
 def generate_tts(
     text: str,
     voice: str = "Kore",
-    output: str = "output.wav",
+    output_dir: str = "audio/",
+    output_name: str = "tts_output",
     model: str = "gemini-2.5-flash-preview-tts",
     stream: bool = False,
     speakers: dict | None = None,
+    use_timestamp: bool = True,
 ) -> str:
     """Generate speech from text.
 
     Args:
         text: Text to convert to speech
         voice: Voice name (for single speaker)
-        output: Output WAV file path
+        output_dir: Directory to save audio file
+        output_name: Base name for output file
         model: TTS model ID
         stream: Use streaming for long text
         speakers: Dict mapping speaker names to voices (for multi-speaker)
+        use_timestamp: Add timestamp to filename
 
     Returns:
         Path to saved audio file
@@ -126,11 +133,22 @@ def generate_tts(
                 all_audio = part.inline_data.data
 
     if all_audio:
-        if not output.endswith(".wav"):
-            output += ".wav"
-        save_wav(output, all_audio)
-        print(f"Saved: {output}")
-        return output
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+
+        if use_timestamp:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = output_name + "_" + timestamp
+        else:
+            filename = output_name
+
+        if not filename.endswith(".wav"):
+            filename += ".wav"
+
+        full_path = output_path / filename
+        save_wav(str(full_path), all_audio)
+        print(f"Saved: {full_path}")
+        return str(full_path)
     else:
         print("Error: No audio generated")
         sys.exit(1)
@@ -158,10 +176,20 @@ def main():
         help="Voice name (default: Kore). Options: Kore, Puck, Charon, Fenrir, Aoede, Zephyr, Sulafat",
     )
     parser.add_argument(
+        "--output-dir",
+        default="audio/",
+        help="Output directory for audio file (default: audio/)",
+    )
+    parser.add_argument(
         "--output",
         "-o",
-        default="output.wav",
-        help="Output WAV file path (default: output.wav)",
+        default="tts_output",
+        help="Base name for output file (default: tts_output). Timestamp will be appended automatically",
+    )
+    parser.add_argument(
+        "--no-timestamp",
+        action="store_true",
+        help="Disable automatic timestamp in filename",
     )
     parser.add_argument(
         "--model",
@@ -184,10 +212,12 @@ def main():
         generate_tts(
             text=args.text,
             voice=args.voice,
-            output=args.output,
+            output_dir=args.output_dir,
+            output_name=args.output,
             model=args.model,
             stream=args.stream,
             speakers=speakers,
+            use_timestamp=not args.no_timestamp,
         )
     except Exception as e:
         print(f"Error: {e}")

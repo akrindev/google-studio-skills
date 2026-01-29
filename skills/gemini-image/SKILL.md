@@ -39,8 +39,9 @@ Use this skill when you need to:
 |-----------|-------------|---------|
 | `prompt` | Text description (required) | `"A futuristic city at sunset"` |
 | `--model`, `-m` | Model to use | `gemini-3-pro-image-preview` |
-| `--output`, `-o` | Output directory | `images/` |
-| `--name`, `-n` | Base filename | `artwork` |
+| `--output-dir`, `-o` | Output directory for images | `images/` |
+| `--name`, `-n` | Base name for output files | `artwork` |
+| `--no-timestamp` | Disable auto timestamp | Flag |
 | `--aspect`, `-a` | Aspect ratio | `16:9` |
 | `--size`, `-s` | Resolution | `2K` or `4K` |
 | `--num` | Number of images (1-4) | `4` |
@@ -56,44 +57,46 @@ python scripts/generate_image.py "A futuristic city at sunset with flying cars"
 ```
 - Best for: Quick image generation, prototypes
 - Model: `gemini-3-pro-image-preview` (default, highest quality)
-- Output: `generated_image.png` in current directory
+- Output: `images/generated_image_YYYYMMDD_HHMMSS.png`
 
 ### Workflow 2: Social Media (Instagram, Facebook)
 ```bash
-python scripts/generate_image.py "Minimalist coffee shop interior" --aspect 1:1 --size 2K
+python scripts/generate_image.py "Minimalist coffee shop interior" --aspect 1:1 --size 2K --name coffee-shop
 ```
 - Best for: Instagram posts, profile pictures
 - Aspect: 1:1 (square format)
 - Resolution: 2K (2048x2048)
+- Output: `images/coffee-shop_YYYYMMDD_HHMMSS.png`
 
 ### Workflow 3: YouTube Thumbnails (16:9)
 ```bash
-python scripts/generate_image.py "Tech gadget review thumbnail with vibrant colors" --aspect 16:9 --size 2K
+python scripts/generate_image.py "Tech gadget review thumbnail with vibrant colors" --aspect 16:9 --size 2K --name thumbnail
 ```
 - Best for: YouTube, video thumbnails
 - Aspect: 16:9 (widescreen)
 - Resolution: 2K (2752x1536)
+- Output: `images/thumbnail_YYYYMMDD_HHMMSS.png`
 
 ### Workflow 4: Multiple Variations
 ```bash
-python scripts/generate_image.py "Abstract geometric patterns in blue and gold" --num 4 --output variations/
+python scripts/generate_image.py "Abstract geometric patterns in blue and gold" --num 4 --name abstract
 ```
 - Best for: A/B testing, design options
 - Generates: 4 distinct variations
-- Output: `artwork_0.png`, `artwork_1.png`, `artwork_2.png`, `artwork_3.png`
+- Output: `images/abstract_YYYYMMDD_HHMMSS_0.png`, `images/abstract_YYYYMMDD_HHMMSS_1.png`, etc.
 
-### Workflow 5: Ultra High Resolution (4K)
+### Workflow 5: Custom Output Directory
 ```bash
-python scripts/generate_image.py "Detailed architectural rendering of modern museum" --aspect 16:9 --size 4K --output professional/
+python scripts/generate_image.py "Detailed architectural rendering of modern museum" --aspect 16:9 --size 4K --output-dir ./professional/ --name museum
 ```
-- Best for: Print materials, high-end assets
-- Model: `gemini-3-pro-image-preview` only
+- Best for: Print materials, high-end assets, organized projects
+- Model: `gemini-3-pro-image-preview` only (for 4K)
 - Resolution: 4K (5504x3072 for 16:9)
-- Use when: Maximum quality required
+- Directory created automatically if it doesn't exist
 
 ### Workflow 6: Photorealistic Images (Imagen 4)
 ```bash
-python scripts/generate_image.py "Robot holding a red skateboard in urban setting" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --num 2
+python scripts/generate_image.py "Robot holding a red skateboard in urban setting" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --num 2 --name robot-skate
 ```
 - Best for: Realistic photos, product shots
 - Model: `imagen-4.0-generate-001` (photorealistic)
@@ -102,7 +105,7 @@ python scripts/generate_image.py "Robot holding a red skateboard in urban settin
 
 ### Workflow 7: Blog Post Featured Image
 ```bash
-python scripts/generate_image.py "Serene mountain lake at sunrise with reflections" --aspect 16:9 --size 2K --output blog-images/ --name featured-image
+python scripts/generate_image.py "Serene mountain lake at sunrise with reflections" --aspect 16:9 --size 2K --output-dir ./blog-images/ --name featured-image
 ```
 - Best for: Blog headers, article images
 - Combines well with: gemini-text for blog content generation
@@ -113,12 +116,20 @@ python scripts/generate_image.py "Serene mountain lake at sunrise with reflectio
 python skills/gemini-text/scripts/generate.py "Write a product description for smart home device"
 
 # 2. Generate product image (this skill)
-python scripts/generate_image.py "Sleek modern smart home device on white background" --aspect 4:3 --size 2K
+python scripts/generate_image.py "Sleek modern smart home device on white background" --aspect 4:3 --size 2K --name product
 
 # 3. Create social media post
 ```
 - Best for: E-commerce, marketing campaigns
 - Combines with: gemini-text, gemini-batch for batch production
+
+### Workflow 9: Disable Timestamp
+```bash
+python scripts/generate_image.py "Fixed filename image" --name my-image --no-timestamp
+```
+- Best for: When you want complete control over filename
+- Output: `images/my-image.png` (no timestamp)
+- Use when: Generating files for specific naming schemes or automated pipelines
 
 ## Parameters Reference
 
@@ -162,8 +173,10 @@ Note: 4K resolution only available with `gemini-3-pro-image-preview`
 ## Output Interpretation
 
 ### File Naming
-- Single image: `{name}.png` or `generated_image.png`
-- Multiple images: `{name}_0.png`, `{name}_1.png`, etc.
+- Default format: `{name}_YYYYMMDD_HHMMSS.png` (auto timestamp)
+- Single image example: `artwork_20260130_031643.png`
+- Multiple images: `{name}_YYYYMMDD_HHMMSS_0.png`, `{name}_YYYYMMDD_HHMMSS_1.png`, etc.
+- Without timestamp (`--no-timestamp`): `{name}.png`
 - Script prints: "Saved: /path/to/file.png"
 
 ### Image Quality
@@ -256,19 +269,25 @@ pip install google-genai pillow
 python scripts/generate_image.py "Your prompt"
 
 # Social media (1:1)
-python scripts/generate_image.py "Prompt" --aspect 1:1 --size 2K
+python scripts/generate_image.py "Prompt" --aspect 1:1 --size 2K --name social-post
 
 # YouTube thumbnail (16:9)
-python scripts/generate_image.py "Prompt" --aspect 16:9 --size 2K
+python scripts/generate_image.py "Prompt" --aspect 16:9 --size 2K --name thumbnail
 
 # 4K high quality
-python scripts/generate_image.py "Prompt" --aspect 16:9 --size 4K
+python scripts/generate_image.py "Prompt" --aspect 16:9 --size 4K --name high-res
 
 # Multiple variations
-python scripts/generate_image.py "Prompt" --num 4
+python scripts/generate_image.py "Prompt" --num 4 --name variations
+
+# Custom directory
+python scripts/generate_image.py "Prompt" --output-dir ./my-images/ --name custom
 
 # Photorealistic
-python scripts/generate_image.py "Prompt" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K
+python scripts/generate_image.py "Prompt" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --name photo
+
+# No timestamp
+python scripts/generate_image.py "Prompt" --name fixed-name --no-timestamp
 ```
 
 ## Reference

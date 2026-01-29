@@ -39,7 +39,9 @@ Use this skill when you need to:
 |-----------|-------------|---------|
 | `text` | Text to convert (required) | `"Hello, world!"` |
 | `--voice`, `-v` | Voice name | `Kore` |
-| `--output`, `-o` | Output WAV file | `audio.wav` |
+| `--output`, `-o` | Base name for output file | `welcome` |
+| `--output-dir` | Output directory for audio | `audio/` |
+| `--no-timestamp` | Disable auto timestamp | Flag |
 | `--model`, `-m` | TTS model | `gemini-2.5-flash-preview-tts` |
 | `--stream`, `-s` | Enable streaming | Flag |
 | `--speakers` | Multi-speaker mapping | `"Joe:Kore,Jane:Puck"` |
@@ -54,15 +56,15 @@ python scripts/tts.py "Hello, world! Have a wonderful day."
 ```
 - Best for: Quick audio generation, simple messages
 - Voice: `Kore` (default, clear and professional)
-- Output: `output.wav` in current directory
+- Output: `audio/tts_output_YYYYMMDD_HHMMSS.wav` (auto timestamp)
 
 ### Workflow 2: Choose Different Voice
 ```bash
-python scripts/tts.py "Welcome to our podcast about technology trends" --voice Puck --output welcome.wav
+python scripts/tts.py "Welcome to our podcast about technology trends" --voice Puck --output welcome
 ```
 - Best for: Friendly, conversational content
 - Voice options: Kore, Puck, Charon, Fenrir, Aoede, Zephyr, Sulafat
-- Use when: Default voice doesn't match content style
+- Output: `audio/welcome_YYYYMMDD_HHMMSS.wav`
 
 ### Workflow 3: Multi-Speaker Conversation
 ```bash
@@ -70,56 +72,73 @@ python scripts/tts.py "TTS the following conversation:
 Joe: How's it going today?
 Jane: Not too bad, how about you?
 Joe: I'm working on a new project.
-Jane: Sounds exciting, tell me more!" --speakers "Joe:Kore,Jane:Puck" --output conversation.wav
+Jane: Sounds exciting, tell me more!" --speakers "Joe:Kore,Jane:Puck" --output conversation
 ```
 - Best for: Dialogues, interviews, role-playing content
 - Format: Marked conversation with speaker names
 - Script automatically routes text to appropriate voices
+- Output: `audio/conversation_YYYYMMDD_HHMMSS.wav`
 
 ### Workflow 4: Long Content with Streaming
 ```bash
-python scripts/tts.py "This is a very long text that would benefit from streaming..." --stream --output long-form.wav
+python scripts/tts.py "This is a very long text that would benefit from streaming..." --stream --output long-form
 ```
 - Best for: Podcasts, audiobooks, long articles
 - Streaming: Processes audio in chunks for long texts
-- Use when: Text exceeds typical limits or needs real-time processing
+- Output: `audio/long-form_YYYYMMDD_HHMMSS.wav`
 
 ### Workflow 5: Professional Voiceover
 ```bash
-python scripts/tts.py "Welcome to our quarterly earnings presentation. Today we'll discuss our growth metrics and future plans." --voice Charon --output voiceover.wav
+python scripts/tts.py "Welcome to our quarterly earnings presentation. Today we'll discuss our growth metrics and future plans." --voice Charon --output voiceover
 ```
 - Best for: Corporate content, presentations, formal announcements
 - Voice: `Charon` (deep, authoritative)
 - Use when: Professional, serious tone required
 
-### Workflow 6: Content Creation Pipeline (Text → Audio)
+### Workflow 6: Custom Output Directory
+```bash
+python scripts/tts.py "Save to specific folder." --output-dir ./my-projects/podcasts/ --output episode1
+```
+- Best for: Organized project structures
+- Directory created automatically if it doesn't exist
+- Output: `./my-projects/podcasts/episode1_YYYYMMDD_HHMMSS.wav`
+
+### Workflow 7: Content Creation Pipeline (Text → Audio)
 ```bash
 # 1. Generate script (gemini-text skill)
 python skills/gemini-text/scripts/generate.py "Write a 2-minute podcast intro about sustainable energy"
 
 # 2. Generate audio (this skill)
-python scripts/tts.py "[Paste generated script]" --voice Fenrir --output podcast-intro.wav
+python scripts/tts.py "[Paste generated script]" --voice Fenrir --output podcast-intro
 
 # 3. Use in video or podcast
 ```
 - Best for: Podcasts, audiobooks, video narration
 - Combines with: gemini-text for script generation
 
-### Workflow 7: Accessible Content
+### Workflow 8: Accessible Content
 ```bash
-python scripts/tts.py "Welcome to our accessible website. This audio describes our main navigation options." --voice Aoede --output accessibility.wav
+python scripts/tts.py "Welcome to our accessible website. This audio describes our main navigation options." --voice Aoede --output accessibility
 ```
 - Best for: Web accessibility, screen reader alternatives
 - Voice: `Aoede` (melodic, pleasant)
 - Use when: Making content accessible to visually impaired users
 
-### Workflow 8: Educational Content
+### Workflow 9: Educational Content
 ```bash
-python scripts/tts.py "Chapter 1: Introduction to Quantum Computing. Let's explore the fundamental principles..." --voice Zephyr --output chapter1.wav
+python scripts/tts.py "Chapter 1: Introduction to Quantum Computing. Let's explore the fundamental principles..." --voice Zephyr --output chapter1
 ```
 - Best for: Educational materials, tutorials, e-learning
 - Voice: `Zephyr` (light, airy)
 - Combines well with: gemini-text for content generation
+
+### Workflow 10: Disable Timestamp
+```bash
+python scripts/tts.py "Fixed filename." --output my-audio --no-timestamp
+```
+- Best for: When you want complete control over filename
+- Output: `audio/my-audio.wav` (no timestamp)
+- Use when: Generating files for specific naming schemes
 
 ## Parameters Reference
 
