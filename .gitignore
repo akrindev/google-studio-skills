@@ -1,3 +1,39 @@
+# Environment
 .env
+.env.*
+!.env.example
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Ruff cache
+.ruff_cache/
+
+# Output files
+*.mp3
+*.wav
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# OS
+.DS_Store
+Thumbs.db

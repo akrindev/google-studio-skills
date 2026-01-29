@@ -1,4 +1,0 @@
-google-generativeai
-google-genai
-typer
-rich
