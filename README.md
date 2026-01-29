@@ -6,14 +6,14 @@ Built following the [Agent Skills](https://agentskills.io) open standard.
 
 ## Available Skills
 
-| Skill | Description |
-|-------|-------------|
-| `gemini-text` | Text generation with Gemini models |
-| `gemini-image` | Image generation with Gemini/Imagen |
-| `gemini-tts` | Text-to-speech synthesis |
-| `gemini-batch` | Batch processing for large workloads |
-| `gemini-embeddings` | Text embeddings for semantic search |
-| `gemini-files` | File upload to Gemini Files API |
+| Skill               | Description                          |
+| ------------------- | ------------------------------------ |
+| `gemini-text`       | Text generation with Gemini models   |
+| `gemini-image`      | Image generation with Gemini/Imagen  |
+| `gemini-tts`        | Text-to-speech synthesis             |
+| `gemini-batch`      | Batch processing for large workloads |
+| `gemini-embeddings` | Text embeddings for semantic search  |
+| `gemini-files`      | File upload to Gemini Files API      |
 
 ## Setup
 
@@ -40,19 +40,59 @@ pip install google-genai
 
 ## Usage with AI Agents
 
-### Claude Code / Gemini CLI / OpenCode
+### 1. Skills CLI (`npx skills`)
 
-These agents automatically discover skills in `skills/` directories. Point your agent to this repository:
+The easiest way to use these skills is via the [Skills CLI](https://skills.sh). It automatically installs skills into your `.agent/skills` directory for discovery by agents like Claude Code or Gemini CLI.
+
+```bash
+# Install a specific skill
+npx skills add https://github.com/akrindev/google-studio-skills/tree/main/skills/gemini-text
+
+# Install the entire collection
+npx skills add akrindev/google-studio-skills
+```
+
+### 2. ClawdHub & Moltbot
+
+[Moltbot](https://molt.bot) (formerly Clawdbot) is a local-first AI assistant. You can manage and run these skills using the `clawdhub` CLI.
+
+**Installation & Setup:**
+```bash
+# Install Moltbot and ClawdHub CLI
+npm install -g moltbot clawdhub
+
+# Initialize Moltbot
+moltbot onboard
+```
+
+**Manage Skills:**
+```bash
+# Search for Gemini skills on ClawdHub
+clawdhub search gemini
+
+# Install a skill to your workspace (~/molt/skills/)
+clawdhub install gemini-text --workdir ~/molt
+```
+
+**Running Skills:**
+Once installed, interact with Moltbot via the terminal or connected chat apps (WhatsApp/Telegram). Simply ask:
+> "Molt, use the gemini-text skill to summarize this document."
+
+### 3. Manual Installation (Claude Code / Gemini CLI / OpenCode)
+
+These agents automatically discover skills in `skills/` directories. You can manually point your agent to this repository:
 
 ```bash
 # Clone the repository
-git clone https://github.com/user/google-skills.git
+git clone https://github.com/akrindev/google-studio-skills.git
 
-# Navigate to a project and the agent will discover skills
-cd your-project
+# Navigate to your project and the agent will discover skills in the adjacent folder
+# or add the path to your agent's configuration
 ```
 
-Or add to your agent's configuration to include this skills directory.
+### 4. Discovery on Skills.sh
+
+Browse the full directory of available skills and see community rankings at [skills.sh](https://skills.sh).
 
 ### Manual Usage
 
@@ -74,12 +114,12 @@ python skills/gemini-embeddings/scripts/embed.py "semantic search query"
 
 ## Default Models (January 2026)
 
-| Capability | Default Model | Notes |
-|------------|---------------|-------|
-| Text | `gemini-3-flash-preview` | Fast, agentic, multimodal |
-| Image | `gemini-3-pro-image-preview` | Up to 4K resolution |
-| TTS | `gemini-2.5-flash-preview-tts` | Multiple voices |
-| Embeddings | `gemini-embedding-001` | 3072 dimensions |
+| Capability | Default Model                  | Notes                     |
+| ---------- | ------------------------------ | ------------------------- |
+| Text       | `gemini-3-flash-preview`       | Fast, agentic, multimodal |
+| Image      | `gemini-3-pro-image-preview`   | Up to 4K resolution       |
+| TTS        | `gemini-2.5-flash-preview-tts` | Multiple voices           |
+| Embeddings | `gemini-embedding-001`         | 3072 dimensions           |
 
 ## Skill Structure
 
