@@ -1,148 +1,279 @@
 ---
 name: gemini-image
-description: Generate images using Google Gemini and Imagen models. Use for AI image generation, text-to-image, creating visuals from prompts, generating multiple images, custom aspect ratios, and high-resolution output up to 4K. Triggers on "generate image", "create image", "imagen", "text to image", "AI art", "nano banana".
+description: Generate images using Google Gemini and Imagen models via scripts/. Use for AI image generation, text-to-image, creating visuals from prompts, generating multiple images, custom aspect ratios, and high-resolution output up to 4K. Triggers on "generate image", "create image", "imagen", "text to image", "AI art", "nano banana".
+license: MIT
+version: 1.0.0
+keywords: image generation, imagen, gemini-3-pro, gemini-2.5, text-to-image, AI art, nano banana, 4K resolution, aspect ratio
 ---
 
 # Gemini Image Generation
 
-Generate high-quality images from text prompts using Google's Gemini and Imagen models.
+Generate high-quality images from text prompts using Google's Gemini and Imagen models through executable scripts.
 
-## Prerequisites
+## When to Use This Skill
 
-- Set `GOOGLE_API_KEY` or `GEMINI_API_KEY` environment variable
-- Install: `pip install google-genai pillow`
-
-## Quick Start
-
-```python
-from google import genai
-from google.genai import types
-
-client = genai.Client()
-
-# Using Gemini 3 Pro Image (recommended)
-response = client.models.generate_content(
-    model="gemini-3-pro-image-preview",
-    contents="A futuristic city at sunset with flying cars"
-)
-
-# Or using Imagen 4
-response = client.models.generate_images(
-    model="imagen-4.0-generate-001",
-    prompt="A futuristic city at sunset with flying cars",
-    config=types.GenerateImagesConfig(number_of_images=1)
-)
-```
+Use this skill when you need to:
+- Create visual content from text descriptions
+- Generate multiple image variations
+- Create images at specific resolutions (1K, 2K, 4K)
+- Produce images for different aspect ratios (social media, banners, etc.)
+- Generate photorealistic images or artistic visuals
+- Create images with person generation controls
+- Batch generate multiple images at once
+- Combine with text generation for complete content creation
 
 ## Available Scripts
 
-- **scripts/generate_image.py** - Full-featured image generation with all options
+### scripts/generate_image.py
+**Purpose**: Generate images using Gemini 3 Pro Image or Imagen 4 models
 
-## Models
+**When to use**:
+- Any image generation task
+- Multiple image generation (1-4 per request)
+- Custom resolution and aspect ratio needs
+- Professional asset creation
+- Photorealistic or artistic image generation
 
-### Gemini 3 Pro Image Preview (Recommended - Highest Quality)
-- **Model ID**: `gemini-3-pro-image-preview`
-- **Nickname**: "Nano Banana Pro"
-- **Best for**: Professional assets, advanced text rendering, up to 4K
-- **Sizes**: 1K, 2K, 4K
-- **Aspect ratios**: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9
-- **Features**: Google Search grounding for references
+**Key parameters**:
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `prompt` | Text description (required) | `"A futuristic city at sunset"` |
+| `--model`, `-m` | Model to use | `gemini-3-pro-image-preview` |
+| `--output`, `-o` | Output directory | `images/` |
+| `--name`, `-n` | Base filename | `artwork` |
+| `--aspect`, `-a` | Aspect ratio | `16:9` |
+| `--size`, `-s` | Resolution | `2K` or `4K` |
+| `--num` | Number of images (1-4) | `4` |
+| `--person` | Person generation policy | `allow_adult` |
 
-### Gemini 2.5 Flash Image (Fast)
-- **Model ID**: `gemini-2.5-flash-image`
-- **Nickname**: "Nano Banana"
-- **Best for**: High-volume, low-latency image generation
-- **Aspect ratios**: 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9
+**Output**: List of saved PNG file paths
 
-### Imagen 4 (Stable)
-- **Model ID**: `imagen-4.0-generate-001`
-- **Best for**: Photorealistic images
-- **Sizes**: 1K, 2K
-- **Aspect ratios**: 1:1, 3:4, 4:3, 9:16, 16:9
-- **Max images**: 4 per request
-- **Note**: Imagen 3 has been shut down
+## Workflows
 
-## Usage Examples
+### Workflow 1: Basic Image Generation
+```bash
+python scripts/generate_image.py "A futuristic city at sunset with flying cars"
+```
+- Best for: Quick image generation, prototypes
+- Model: `gemini-3-pro-image-preview` (default, highest quality)
+- Output: `generated_image.png` in current directory
 
-### Generate with Imagen 4
+### Workflow 2: Social Media (Instagram, Facebook)
+```bash
+python scripts/generate_image.py "Minimalist coffee shop interior" --aspect 1:1 --size 2K
+```
+- Best for: Instagram posts, profile pictures
+- Aspect: 1:1 (square format)
+- Resolution: 2K (2048x2048)
 
-```python
-from google import genai
-from google.genai import types
+### Workflow 3: YouTube Thumbnails (16:9)
+```bash
+python scripts/generate_image.py "Tech gadget review thumbnail with vibrant colors" --aspect 16:9 --size 2K
+```
+- Best for: YouTube, video thumbnails
+- Aspect: 16:9 (widescreen)
+- Resolution: 2K (2752x1536)
 
-client = genai.Client()
+### Workflow 4: Multiple Variations
+```bash
+python scripts/generate_image.py "Abstract geometric patterns in blue and gold" --num 4 --output variations/
+```
+- Best for: A/B testing, design options
+- Generates: 4 distinct variations
+- Output: `artwork_0.png`, `artwork_1.png`, `artwork_2.png`, `artwork_3.png`
 
-response = client.models.generate_images(
-    model="imagen-4.0-generate-001",
-    prompt="Robot holding a red skateboard",
-    config=types.GenerateImagesConfig(
-        number_of_images=4,
-        aspect_ratio="16:9",
-        image_size="2K",
-        person_generation="allow_adult"
-    )
-)
+### Workflow 5: Ultra High Resolution (4K)
+```bash
+python scripts/generate_image.py "Detailed architectural rendering of modern museum" --aspect 16:9 --size 4K --output professional/
+```
+- Best for: Print materials, high-end assets
+- Model: `gemini-3-pro-image-preview` only
+- Resolution: 4K (5504x3072 for 16:9)
+- Use when: Maximum quality required
 
-for i, img in enumerate(response.generated_images):
-    with open(f"image_{i}.png", "wb") as f:
-        f.write(img.image.image_bytes)
+### Workflow 6: Photorealistic Images (Imagen 4)
+```bash
+python scripts/generate_image.py "Robot holding a red skateboard in urban setting" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --num 2
+```
+- Best for: Realistic photos, product shots
+- Model: `imagen-4.0-generate-001` (photorealistic)
+- Notes: English prompts only
+- Max 4 images per request
+
+### Workflow 7: Blog Post Featured Image
+```bash
+python scripts/generate_image.py "Serene mountain lake at sunrise with reflections" --aspect 16:9 --size 2K --output blog-images/ --name featured-image
+```
+- Best for: Blog headers, article images
+- Combines well with: gemini-text for blog content generation
+
+### Workflow 8: Content Creation Pipeline (Text + Image)
+```bash
+# 1. Generate content (gemini-text skill)
+python skills/gemini-text/scripts/generate.py "Write a product description for smart home device"
+
+# 2. Generate product image (this skill)
+python scripts/generate_image.py "Sleek modern smart home device on white background" --aspect 4:3 --size 2K
+
+# 3. Create social media post
+```
+- Best for: E-commerce, marketing campaigns
+- Combines with: gemini-text, gemini-batch for batch production
+
+## Parameters Reference
+
+### Model Selection
+
+| Model | Nickname | Quality | Max Size | Best For |
+|-------|----------|---------|----------|----------|
+| `gemini-3-pro-image-preview` | Nano Banana Pro | Highest | 4K | Professional assets, advanced text rendering |
+| `gemini-2.5-flash-image` | Nano Banana | Good | 2K | High-volume, low-latency |
+| `imagen-4.0-generate-001` | Imagen 4 | Photorealistic | 2K | Realistic photos, product shots |
+
+### Aspect Ratios
+
+| Ratio | Use Case | 1K Size | 2K Size |
+|-------|----------|----------|----------|
+| 1:1 | Instagram, avatars | 1024x1024 | 2048x2048 |
+| 16:9 | YouTube, presentations | 1376x768 | 2752x1536 |
+| 9:16 | Instagram Stories, TikTok | 768x1376 | 1536x2752 |
+| 4:3 | Traditional displays | 1024x768 | 2048x1536 |
+| 3:4 | Portrait orientation | 768x1024 | 1536x2048 |
+| 21:9 | Ultrawide | - | 5504x2400 |
+
+Note: 4K resolution only available with `gemini-3-pro-image-preview`
+
+### Resolution Guide
+
+| Size | Use Case | Best Model |
+|------|----------|-------------|
+| 1K (1024px) | Web thumbnails, previews | Any model |
+| 2K (2048px) | Standard web, social media | Any model |
+| 4K (4096px) | Print, high-end assets | gemini-3-pro only |
+
+### Person Generation Policy
+
+| Policy | Description | Restrictions |
+|---------|-------------|----------------|
+| `dont_allow` | No people in images | None |
+| `allow_adult` | Adults only | Recommended default |
+| `allow_all` | All ages | Restricted in EU, UK, CH, MENA |
+
+## Output Interpretation
+
+### File Naming
+- Single image: `{name}.png` or `generated_image.png`
+- Multiple images: `{name}_0.png`, `{name}_1.png`, etc.
+- Script prints: "Saved: /path/to/file.png"
+
+### Image Quality
+- All images include SynthID watermark for authenticity
+- PNG format for lossless quality
+- Can be converted to JPEG/WEBP if needed
+- 4K images are significantly larger file sizes
+
+### Error Messages
+- "Model not available": Check model name spelling
+- "Unsupported size": Verify size/model combination
+- "Aspect ratio error": Use supported ratios for selected model
+
+## Common Issues
+
+### "google-genai or pillow not installed"
+```bash
+pip install google-genai pillow
 ```
 
-### Generate with Gemini 3 Pro (4K)
+### "Image generation failed"
+- Check prompt length (too verbose can fail)
+- Try simpler, more focused prompts
+- Verify model availability in your region
+- Check API quota limits
 
-```python
-response = client.models.generate_content(
-    model="gemini-3-pro-image-preview",
-    contents="Create a nano banana dish in a fancy restaurant",
-    config=types.GenerateContentConfig(
-        generation_config={
-            "image_config": {
-                "aspect_ratio": "16:9",
-                "image_size": "4K"
-            }
-        }
-    )
-)
+### "Unsupported aspect ratio"
+- Check if ratio is supported by selected model
+- Imagen 4 has fewer ratio options than Gemini
+- Use 16:9 or 1:1 for best compatibility
 
-# Extract image from response
-image_data = response.candidates[0].content.parts[0].inline_data.data
+### "4K not supported"
+- 4K only works with `gemini-3-pro-image-preview`
+- Use `--size 2K` for other models
+- Try `--model gemini-3-pro-image-preview --size 4K`
+
+### "Imagen prompt language error"
+- Imagen models support English prompts only
+- Use `gemini-3-pro-image-preview` for other languages
+- Translate prompt to English for Imagen
+
+### File too large for storage
+- Use `--size 1K` for smaller files
+- Compress images after generation
+- Convert PNG to JPEG for web use
+
+## Best Practices
+
+### Prompt Engineering
+- Be specific and descriptive
+- Include style descriptors (e.g., "photorealistic", "digital art")
+- Mention lighting, mood, and composition
+- Use analogies for complex concepts
+- Avoid negative prompts (describe what you want, not what to avoid)
+
+### Model Selection
+- Use `gemini-3-pro-image-preview` for: High quality, text rendering, 4K
+- Use `gemini-2.5-flash-image` for: Speed, high volume
+- Use `imagen-4.0-generate-001` for: Photorealism, product shots
+
+### Performance Optimization
+- Generate multiple images at once with `--num`
+- Use lower resolution for previews
+- Batch requests for high-volume needs (gemini-batch skill)
+- Cache results for repeated requests
+
+### Quality Tips
+- Use 2K resolution for most web uses
+- 4K only when maximum detail is needed
+- Combine specific prompts with style guidance
+- Test prompts with `--num 1` before generating batches
+
+### Cost Management
+- Use flash models for cost efficiency
+- 4K generation costs significantly more
+- Batch multiple requests when possible
+- Generate at 1K for testing, 2K/4K for final
+
+## Related Skills
+
+- **gemini-text**: Generate text content alongside images
+- **gemini-tts**: Create audio for image-based content
+- **gemini-batch**: Process multiple image requests efficiently
+- **gemini-embeddings**: Generate image embeddings for similarity search
+
+## Quick Reference
+
+```bash
+# Basic
+python scripts/generate_image.py "Your prompt"
+
+# Social media (1:1)
+python scripts/generate_image.py "Prompt" --aspect 1:1 --size 2K
+
+# YouTube thumbnail (16:9)
+python scripts/generate_image.py "Prompt" --aspect 16:9 --size 2K
+
+# 4K high quality
+python scripts/generate_image.py "Prompt" --aspect 16:9 --size 4K
+
+# Multiple variations
+python scripts/generate_image.py "Prompt" --num 4
+
+# Photorealistic
+python scripts/generate_image.py "Prompt" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K
 ```
 
-## Configuration Options
+## Reference
 
-### Imagen 4 Config
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `number_of_images` | int | 1-4 images per request |
-| `image_size` | str | "1K" or "2K" |
-| `aspect_ratio` | str | "1:1", "3:4", "4:3", "9:16", "16:9" |
-| `person_generation` | str | "dont_allow", "allow_adult", "allow_all" |
-
-### Gemini 3 Pro Config
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `image_size` | str | "1K", "2K", or "4K" |
-| `aspect_ratio` | str | Multiple ratios including 21:9 |
-
-## Resolution Reference
-
-### Imagen 4
-| Aspect Ratio | 1K Resolution | 2K Resolution |
-|--------------|---------------|---------------|
-| 1:1 | 1024x1024 | 2048x2048 |
-| 16:9 | 1376x768 | 2752x1536 |
-| 9:16 | 768x1376 | 1536x2752 |
-
-### Gemini 3 Pro Image Preview
-| Aspect Ratio | 1K | 2K | 4K |
-|--------------|-----|-----|-----|
-| 1:1 | 1024x1024 | 2048x2048 | 4096x4096 |
-| 16:9 | 1376x768 | 2752x1536 | 5504x3072 |
-
-## Notes
-
-- Imagen supports **English prompts only**
-- All generated images include **SynthID watermark** for authenticity
-- `person_generation="allow_all"` is restricted in EU, UK, CH, MENA regions
+- See `references/` for model documentation (if available)
+- Get API key: https://aistudio.google.com/apikey
+- Documentation: https://ai.google.dev/gemini-api/docs/image-generation
+- SynthID: https://deepmind.google/technologies/synthid/
