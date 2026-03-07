@@ -24,7 +24,7 @@ Use this skill when you need to:
 
 ## Available Scripts
 
-### scripts/tts.py
+### scripts/tts.js
 **Purpose**: Convert text to speech using Gemini TTS models
 
 **When to use**:
@@ -52,7 +52,7 @@ Use this skill when you need to:
 
 ### Workflow 1: Basic Text-to-Speech
 ```bash
-python scripts/tts.py "Hello, world! Have a wonderful day."
+node scripts/tts.js "Hello, world! Have a wonderful day."
 ```
 - Best for: Quick audio generation, simple messages
 - Voice: `Kore` (default, clear and professional)
@@ -60,7 +60,7 @@ python scripts/tts.py "Hello, world! Have a wonderful day."
 
 ### Workflow 2: Choose Different Voice
 ```bash
-python scripts/tts.py "Welcome to our podcast about technology trends" --voice Puck --output welcome
+node scripts/tts.js "Welcome to our podcast about technology trends" --voice Puck --output welcome
 ```
 - Best for: Friendly, conversational content
 - Voice options: Kore, Puck, Charon, Fenrir, Aoede, Zephyr, Sulafat
@@ -68,7 +68,7 @@ python scripts/tts.py "Welcome to our podcast about technology trends" --voice P
 
 ### Workflow 3: Multi-Speaker Conversation
 ```bash
-python scripts/tts.py "TTS the following conversation:
+node scripts/tts.js "TTS the following conversation:
 Joe: How's it going today?
 Jane: Not too bad, how about you?
 Joe: I'm working on a new project.
@@ -81,7 +81,7 @@ Jane: Sounds exciting, tell me more!" --speakers "Joe:Kore,Jane:Puck" --output c
 
 ### Workflow 4: Long Content with Streaming
 ```bash
-python scripts/tts.py "This is a very long text that would benefit from streaming..." --stream --output long-form
+node scripts/tts.js "This is a very long text that would benefit from streaming..." --stream --output long-form
 ```
 - Best for: Podcasts, audiobooks, long articles
 - Streaming: Processes audio in chunks for long texts
@@ -89,7 +89,7 @@ python scripts/tts.py "This is a very long text that would benefit from streamin
 
 ### Workflow 5: Professional Voiceover
 ```bash
-python scripts/tts.py "Welcome to our quarterly earnings presentation. Today we'll discuss our growth metrics and future plans." --voice Charon --output voiceover
+node scripts/tts.js "Welcome to our quarterly earnings presentation. Today we'll discuss our growth metrics and future plans." --voice Charon --output voiceover
 ```
 - Best for: Corporate content, presentations, formal announcements
 - Voice: `Charon` (deep, authoritative)
@@ -97,7 +97,7 @@ python scripts/tts.py "Welcome to our quarterly earnings presentation. Today we'
 
 ### Workflow 6: Custom Output Directory
 ```bash
-python scripts/tts.py "Save to specific folder." --output-dir ./my-projects/podcasts/ --output episode1
+node scripts/tts.js "Save to specific folder." --output-dir ./my-projects/podcasts/ --output episode1
 ```
 - Best for: Organized project structures
 - Directory created automatically if it doesn't exist
@@ -106,10 +106,10 @@ python scripts/tts.py "Save to specific folder." --output-dir ./my-projects/podc
 ### Workflow 7: Content Creation Pipeline (Text → Audio)
 ```bash
 # 1. Generate script (gemini-text skill)
-python skills/gemini-text/scripts/generate.py "Write a 2-minute podcast intro about sustainable energy"
+node skills/gemini-text/scripts/generate.js "Write a 2-minute podcast intro about sustainable energy"
 
 # 2. Generate audio (this skill)
-python scripts/tts.py "[Paste generated script]" --voice Fenrir --output podcast-intro
+node scripts/tts.js "[Paste generated script]" --voice Fenrir --output podcast-intro
 
 # 3. Use in video or podcast
 ```
@@ -118,7 +118,7 @@ python scripts/tts.py "[Paste generated script]" --voice Fenrir --output podcast
 
 ### Workflow 8: Accessible Content
 ```bash
-python scripts/tts.py "Welcome to our accessible website. This audio describes our main navigation options." --voice Aoede --output accessibility
+node scripts/tts.js "Welcome to our accessible website. This audio describes our main navigation options." --voice Aoede --output accessibility
 ```
 - Best for: Web accessibility, screen reader alternatives
 - Voice: `Aoede` (melodic, pleasant)
@@ -126,7 +126,7 @@ python scripts/tts.py "Welcome to our accessible website. This audio describes o
 
 ### Workflow 9: Educational Content
 ```bash
-python scripts/tts.py "Chapter 1: Introduction to Quantum Computing. Let's explore the fundamental principles..." --voice Zephyr --output chapter1
+node scripts/tts.js "Chapter 1: Introduction to Quantum Computing. Let's explore the fundamental principles..." --voice Zephyr --output chapter1
 ```
 - Best for: Educational materials, tutorials, e-learning
 - Voice: `Zephyr` (light, airy)
@@ -134,7 +134,7 @@ python scripts/tts.py "Chapter 1: Introduction to Quantum Computing. Let's explo
 
 ### Workflow 10: Disable Timestamp
 ```bash
-python scripts/tts.py "Fixed filename." --output my-audio --no-timestamp
+node scripts/tts.js "Fixed filename." --output my-audio --no-timestamp
 ```
 - Best for: When you want complete control over filename
 - Output: `audio/my-audio.wav` (no timestamp)
@@ -199,7 +199,7 @@ python scripts/tts.py "Fixed filename." --output my-audio --no-timestamp
 
 ### "google-genai not installed"
 ```bash
-pip install google-genai
+npm install @google/genai@latest dotenv@latest
 ```
 
 ### "Voice name not found"
@@ -283,19 +283,19 @@ pip install google-genai
 
 ```bash
 # Basic
-python scripts/tts.py "Your text here"
+node scripts/tts.js "Your text here"
 
 # Custom voice
-python scripts/tts.py "Your text" --voice Puck --output audio.wav
+node scripts/tts.js "Your text" --voice Puck --output audio.wav
 
 # Multi-speaker
-python scripts/tts.py "Joe: Hi. Jane: Hello!" --speakers "Joe:Kore,Jane:Puck"
+node scripts/tts.js "Joe: Hi. Jane: Hello!" --speakers "Joe:Kore,Jane:Puck"
 
 # Streaming
-python scripts/tts.py "Long text..." --stream --output long.wav
+node scripts/tts.js "Long text..." --stream --output long.wav
 
 # Professional
-python scripts/tts.py "Corporate announcement" --voice Charon
+node scripts/tts.js "Corporate announcement" --voice Charon
 ```
 
 ## Reference

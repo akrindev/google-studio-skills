@@ -24,7 +24,7 @@ Use this skill when you need to:
 
 ## Available Scripts
 
-### scripts/embed.py
+### scripts/embed.js
 **Purpose**: Generate embeddings and calculate similarity
 
 **When to use**:
@@ -50,7 +50,7 @@ Use this skill when you need to:
 
 ### Workflow 1: Single Text Embedding
 ```bash
-python scripts/embed.py "What is the meaning of life?"
+node scripts/embed.js "What is the meaning of life?"
 ```
 - Best for: Basic embedding generation
 - Output: Vector with 3072 dimensions (default)
@@ -59,10 +59,10 @@ python scripts/embed.py "What is the meaning of life?"
 ### Workflow 2: Semantic Search
 ```bash
 # 1. Generate embedding for query
-python scripts/embed.py "best practices for coding" --task RETRIEVAL_QUERY > query.json
+node scripts/embed.js "best practices for coding" --task RETRIEVAL_QUERY > query.json
 
 # 2. Generate embeddings for documents (batch)
-python scripts/embed.py "Coding best practices include version control" "Clean code is essential" --task RETRIEVAL_DOCUMENT > docs.json
+node scripts/embed.js "Coding best practices include version control" "Clean code is essential" --task RETRIEVAL_DOCUMENT > docs.json
 
 # 3. Compare and find most similar (calculate similarity separately)
 ```
@@ -72,7 +72,7 @@ python scripts/embed.py "Coding best practices include version control" "Clean c
 
 ### Workflow 3: Text Similarity Comparison
 ```bash
-python scripts/embed.py "What is the meaning of life?" "What is the purpose of existence?" "How do I bake a cake?" --similarity
+node scripts/embed.js "What is the meaning of life?" "What is the purpose of existence?" "How do I bake a cake?" --similarity
 ```
 - Best for: Comparing multiple texts, finding duplicates
 - Output: Pairwise similarity scores (0-1)
@@ -80,7 +80,7 @@ python scripts/embed.py "What is the meaning of life?" "What is the purpose of e
 
 ### Workflow 4: Dimensionality Reduction for Efficiency
 ```bash
-python scripts/embed.py "Text to embed" --dim 768
+node scripts/embed.js "Text to embed" --dim 768
 ```
 - Best for: Faster storage and comparison
 - Options: `768`, `1536`, or `3072` (default)
@@ -89,7 +89,7 @@ python scripts/embed.py "Text to embed" --dim 768
 ### Workflow 5: Document Clustering
 ```bash
 # 1. Generate embeddings for multiple documents
-python scripts/embed.py "Machine learning is AI" "Deep learning is a subset" "Neural networks power AI" --json > embeddings.jsonl
+node scripts/embed.js "Machine learning is AI" "Deep learning is a subset" "Neural networks power AI" --json > embeddings.jsonl
 
 # 2. Process embeddings with clustering algorithm (your code)
 # Use scikit-learn, KMeans, etc.
@@ -101,20 +101,20 @@ python scripts/embed.py "Machine learning is AI" "Deep learning is a subset" "Ne
 ### Workflow 6: RAG Implementation
 ```bash
 # 1. Create document embeddings (one-time setup)
-python scripts/embed.py "Document 1 content" "Document 2 content" --task RETRIEVAL_DOCUMENT --dim 1536
+node scripts/embed.js "Document 1 content" "Document 2 content" --task RETRIEVAL_DOCUMENT --dim 1536
 
 # 2. For each query, find similar documents
-python scripts/embed.py "User query here" --task RETRIEVAL_QUERY
+node scripts/embed.js "User query here" --task RETRIEVAL_QUERY
 
 # 3. Use retrieved documents in prompt to LLM (gemini-text)
-python skills/gemini-text/scripts/generate.py "Context: [retrieved docs]. Answer: [user query]"
+node skills/gemini-text/scripts/generate.js "Context: [retrieved docs]. Answer: [user query]"
 ```
 - Best for: Building knowledge-based AI systems
 - Combines with: gemini-text for generation with context
 
 ### Workflow 7: JSON Output for API Integration
 ```bash
-python scripts/embed.py "Text to process" --json
+node scripts/embed.js "Text to process" --json
 ```
 - Best for: API responses, database storage
 - Output: JSON array of embedding vectors
@@ -210,7 +210,7 @@ Pairwise Similarity:
 
 ### "google-genai not installed"
 ```bash
-pip install google-genai numpy
+npm install @google/genai@latest dotenv@latest
 ```
 
 ### "numpy not installed" (for similarity)
@@ -287,22 +287,22 @@ pip install numpy
 
 ```bash
 # Basic embedding
-python scripts/embed.py "Your text here"
+node scripts/embed.js "Your text here"
 
 # Semantic search
-python scripts/embed.py "Query" --task RETRIEVAL_QUERY
+node scripts/embed.js "Query" --task RETRIEVAL_QUERY
 
 # Document embedding
-python scripts/embed.py "Document text" --task RETRIEVAL_DOCUMENT
+node scripts/embed.js "Document text" --task RETRIEVAL_DOCUMENT
 
 # Similarity comparison
-python scripts/embed.py "Text 1" "Text 2" "Text 3" --similarity
+node scripts/embed.js "Text 1" "Text 2" "Text 3" --similarity
 
 # Dimensionality reduction
-python scripts/embed.py "Text" --dim 768
+node scripts/embed.js "Text" --dim 768
 
 # JSON output
-python scripts/embed.py "Text" --json
+node scripts/embed.js "Text" --json
 ```
 
 ## Reference

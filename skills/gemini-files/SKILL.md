@@ -24,7 +24,7 @@ Use this skill when you need to:
 
 ## Available Scripts
 
-### scripts/upload.py
+### scripts/upload.js
 **Purpose**: Upload files to Gemini File API
 
 **When to use**:
@@ -46,7 +46,7 @@ Use this skill when you need to:
 
 ### Workflow 1: Basic File Upload
 ```bash
-python scripts/upload.py image.jpg
+node scripts/upload.js image.jpg
 ```
 - Best for: Quick uploads, simple files
 - Output: File name and URI for API use
@@ -54,7 +54,7 @@ python scripts/upload.py image.jpg
 
 ### Workflow 2: Upload with Custom Name
 ```bash
-python scripts/upload.py document.pdf --name "Quarterly Report Q4 2026"
+node scripts/upload.js document.pdf --name "Quarterly Report Q4 2026"
 ```
 - Best for: Organizing files, tracking uploads
 - Use when: Original filename not descriptive enough
@@ -62,7 +62,7 @@ python scripts/upload.py document.pdf --name "Quarterly Report Q4 2026"
 
 ### Workflow 3: Upload and Wait for Processing
 ```bash
-python scripts/upload.py video.mp4 --wait
+node scripts/upload.js video.mp4 --wait
 ```
 - Best for: Large files, videos, audio
 - Waits for file to be ACTIVE state
@@ -71,10 +71,10 @@ python scripts/upload.py video.mp4 --wait
 ### Workflow 4: Upload Image for Analysis
 ```bash
 # 1. Upload image
-python scripts/upload.py photo.png --name "product-shot"
+node scripts/upload.js photo.png --name "product-shot"
 
 # 2. Use with gemini-text for analysis
-python skills/gemini-text/scripts/generate.py "Describe this image" --image photo.png
+node skills/gemini-text/scripts/generate.js "Describe this image" --image photo.png
 ```
 - Best for: Image analysis, captioning, visual Q&A
 - Combines with: gemini-text for multimodal processing
@@ -82,10 +82,10 @@ python skills/gemini-text/scripts/generate.py "Describe this image" --image phot
 ### Workflow 5: Upload PDF for Content Extraction
 ```bash
 # 1. Upload PDF
-python scripts/upload.py research-paper.pdf --name "AI-Research-Paper" --wait
+node scripts/upload.js research-paper.pdf --name "AI-Research-Paper" --wait
 
 # 2. Extract content with gemini-text
-python skills/gemini-text/scripts/generate.py "Extract key findings from this document" --image research-paper.pdf
+node skills/gemini-text/scripts/generate.js "Extract key findings from this document" --image research-paper.pdf
 ```
 - Best for: Document processing, content extraction
 - Combines with: gemini-text for analysis
@@ -94,7 +94,7 @@ python skills/gemini-text/scripts/generate.py "Extract key findings from this do
 ```bash
 # 1. Upload multiple files
 for file in *.jpg; do
-    python scripts/upload.py "$file"
+    node scripts/upload.js "$file"
 done
 
 # 2. Create batch job using uploaded files (gemini-batch skill)
@@ -105,10 +105,10 @@ done
 ### Workflow 7: Upload Audio for Transcription
 ```bash
 # 1. Upload audio
-python scripts/upload.py interview.mp3 --name "interview-001" --wait
+node scripts/upload.js interview.mp3 --name "interview-001" --wait
 
 # 2. Process with gemini-text (if transcription available)
-python skills/gemini-text/scripts/generate.py "Transcribe and summarize this audio" --image interview.mp3
+node skills/gemini-text/scripts/generate.js "Transcribe and summarize this audio" --image interview.mp3
 ```
 - Best for: Audio processing, transcription, podcast analysis
 - Combines with: gemini-text for audio analysis
@@ -116,10 +116,10 @@ python skills/gemini-text/scripts/generate.py "Transcribe and summarize this aud
 ### Workflow 8: Upload Video for Content Analysis
 ```bash
 # 1. Upload video (may take time)
-python scripts/upload.py product-demo.mp4 --name "demo-video" --wait
+node scripts/upload.js product-demo.mp4 --name "demo-video" --wait
 
 # 2. Analyze with gemini-text
-python skills/gemini-text/scripts/generate.py "Analyze this product demo video" --image product-demo.mp4
+node skills/gemini-text/scripts/generate.js "Analyze this product demo video" --image product-demo.mp4
 ```
 - Best for: Video analysis, content summarization
 - Note: Videos may require significant processing time
@@ -182,14 +182,14 @@ File ready!
 Once uploaded, reference file by name:
 ```bash
 # With gemini-text
-python skills/gemini-text/scripts/generate.py "Analyze" --image <uploaded-file-path>
+node skills/gemini-text/scripts/generate.js "Analyze" --image <uploaded-file-path>
 ```
 
 ## Common Issues
 
 ### "google-genai not installed"
 ```bash
-pip install google-genai
+npm install @google/genai@latest dotenv@latest
 ```
 
 ### "File not found"
@@ -269,37 +269,38 @@ pip install google-genai
 
 ```bash
 # Basic upload
-python scripts/upload.py image.jpg
+node scripts/upload.js image.jpg
 
 # With custom name
-python scripts/upload.py document.pdf --name "My Document"
+node scripts/upload.js document.pdf --name "My Document"
 
 # Wait for processing
-python scripts/upload.py video.mp4 --wait
+node scripts/upload.js video.mp4 --wait
 
 # Multiple files
-for file in *.jpg; do python scripts/upload.py "$file"; done
+for file in *.jpg; do node scripts/upload.js "$file"; done
 ```
 
 ## File Management API
 
-While not in scripts, you can also manage files via Python:
+While not in scripts, you can also manage files via JavaScript:
 
-```python
-from google import genai
+```javascript
+import { GoogleGenAI } from "@google/genai";
 
-client = genai.Client()
+const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-# List all files
-for file in client.files.list():
-    print(f"{file.name}: {file.display_name} ({file.state})")
+// List all files
+for await (const file of client.files.list()) {
+  console.log(`${file.name}: ${file.displayName} (${file.state})`);
+}
 
-# Get file info
-file = client.files.get(name="files/abc123...")
-print(f"State: {file.state}")
+// Get file info
+const file = await client.files.get({ name: "files/abc123..." });
+console.log(`State: ${file.state}`);
 
-# Delete file
-client.files.delete(name="files/abc123...")
+// Delete file
+await client.files.delete({ name: "files/abc123..." });
 ```
 
 ## Reference

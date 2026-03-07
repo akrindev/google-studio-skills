@@ -24,7 +24,7 @@ Use this skill when you need to:
 
 ## Available Scripts
 
-### scripts/create_batch.py
+### scripts/create_batch.js
 **Purpose**: Create a batch job from a JSONL file
 
 **When to use**:
@@ -39,9 +39,9 @@ Use this skill when you need to:
 | `--model`, `-m` | Model to use | `gemini-3-flash-preview` |
 | `--name`, `-n` | Display name for job | `"my-batch-job"` |
 
-**Output**: Job name/ID to track with check_status.py
+**Output**: Job name/ID to track with check_status.js
 
-### scripts/check_status.py
+### scripts/check_status.js
 **Purpose**: Monitor batch job progress and completion
 
 **When to use**:
@@ -57,7 +57,7 @@ Use this skill when you need to:
 
 **Output**: Job status and final state
 
-### scripts/get_results.py
+### scripts/get_results.js
 **Purpose**: Retrieve completed batch job results
 
 **When to use**:
@@ -82,13 +82,13 @@ echo '{"key": "req1", "request": {"contents": [{"parts": [{"text": "Explain phot
 echo '{"key": "req2", "request": {"contents": [{"parts": [{"text": "What is gravity?"}]}}]}' >> requests.jsonl
 
 # 2. Create batch job
-python scripts/create_batch.py requests.jsonl --name "science-questions"
+node scripts/create_batch.js requests.jsonl --name "science-questions"
 
 # 3. Check status
-python scripts/check_status.py <job-name> --wait
+node scripts/check_status.js <job-name> --wait
 
 # 4. Get results
-python scripts/get_results.py <job-name> --output results.jsonl
+node scripts/get_results.js <job-name> --output results.jsonl
 ```
 - Best for: Basic bulk processing, cost efficiency
 - Typical time: Minutes to hours depending on job size
@@ -116,9 +116,9 @@ with open("content-requests.jsonl", "w") as f:
 EOF
 
 # 2. Process batch
-python scripts/create_batch.py content-requests.jsonl --name "blog-posts" --model gemini-3-flash-preview
-python scripts/check_status.py <job-name> --wait
-python scripts/get_results.py <job-name> --output blog-posts.jsonl
+node scripts/create_batch.js content-requests.jsonl --name "blog-posts" --model gemini-3-flash-preview
+node scripts/check_status.js <job-name> --wait
+node scripts/get_results.js <job-name> --output blog-posts.jsonl
 ```
 - Best for: Blog generation, article creation, bulk writing
 - Combines with: gemini-text for content needs
@@ -149,9 +149,9 @@ with open("product-descriptions.jsonl", "w") as f:
 EOF
 
 # 2. Process
-python scripts/create_batch.py product-descriptions.jsonl
-python scripts/check_status.py <job-name> --wait
-python scripts/get_results.py <job-name> --output results.jsonl
+node scripts/create_batch.js product-descriptions.jsonl
+node scripts/check_status.js <job-name> --wait
+node scripts/get_results.js <job-name> --output results.jsonl
 ```
 - Best for: Product descriptions, dataset enrichment, bulk analysis
 
@@ -179,9 +179,9 @@ with open("emails.jsonl", "w") as f:
 EOF
 
 # 2. Process batch
-python scripts/create_batch.py emails.jsonl --name "email-campaign"
-python scripts/check_status.py <job-name> --wait
-python scripts/get_results.py <job-name> --output email-results.jsonl
+node scripts/create_batch.js emails.jsonl --name "email-campaign"
+node scripts/check_status.js <job-name> --wait
+node scripts/get_results.js <job-name> --output email-results.jsonl
 ```
 - Best for: Marketing campaigns, personalized outreach
 - Combines with: gemini-text for email content
@@ -189,16 +189,16 @@ python scripts/get_results.py <job-name> --output email-results.jsonl
 ### Workflow 5: Async Job Monitoring
 ```bash
 # 1. Create job
-python scripts/create_batch.py large-batch.jsonl --name "big-job"
+node scripts/create_batch.js large-batch.jsonl --name "big-job"
 
 # 2. Check status periodically (non-blocking)
 while true; do
-    python scripts/check_status.py <job-name>
+    node scripts/check_status.js <job-name>
     sleep 60  # Check every minute
 done
 
 # 3. Get results when done
-python scripts/get_results.py <job-name> --output final-results.jsonl
+node scripts/get_results.js <job-name> --output final-results.jsonl
 ```
 - Best for: Long-running jobs, background processing
 - Use when: You don't need immediate results
@@ -206,11 +206,11 @@ python scripts/get_results.py <job-name> --output final-results.jsonl
 ### Workflow 6: Cost-Optimized Bulk Processing
 ```bash
 # 1. Use flash model for cost efficiency
-python scripts/create_batch.py requests.jsonl --model gemini-3-flash-preview --name "cost-optimized"
+node scripts/create_batch.js requests.jsonl --model gemini-3-flash-preview --name "cost-optimized"
 
 # 2. Monitor and retrieve
-python scripts/check_status.py <job-name> --wait
-python scripts/get_results.py <job-name>
+node scripts/check_status.js <job-name> --wait
+node scripts/get_results.js <job-name>
 ```
 - Best for: High-volume, cost-sensitive applications
 - Savings: Batch API typically 50%+ cheaper than real-time
@@ -218,12 +218,12 @@ python scripts/get_results.py <job-name>
 ### Workflow 7: Multi-Stage Pipeline
 ```bash
 # Stage 1: Generate content
-python scripts/create_batch.py content-requests.jsonl --name "stage1-content"
-python scripts/check_status.py <job1> --wait
+node scripts/create_batch.js content-requests.jsonl --name "stage1-content"
+node scripts/check_status.js <job1> --wait
 
 # Stage 2: Summarize content
-python scripts/create_batch.py summaries.jsonl --name "stage2-summaries"
-python scripts/check_status.py <job2> --wait
+node scripts/create_batch.js summaries.jsonl --name "stage2-summaries"
+node scripts/check_status.js <job2> --wait
 
 # Stage 3: Convert to audio (gemini-tts)
 # Process results from stage 2
@@ -308,7 +308,7 @@ Each line contains:
 
 ### "google-genai not installed"
 ```bash
-pip install google-genai
+npm install @google/genai@latest dotenv@latest
 ```
 
 ### "JSONL file not found"
@@ -331,7 +331,7 @@ pip install google-genai
 ### "No results found"
 - Ensure job state is `JOB_STATE_SUCCEEDED`
 - Wait for job completion before retrieving
-- Check job status first with check_status.py
+- Check job status first with check_status.js
 
 ### "Processing stuck in RUNNING state"
 - Large jobs can take hours
@@ -382,12 +382,12 @@ pip install google-genai
 
 ```bash
 # Basic workflow
-python scripts/create_batch.py requests.jsonl
-python scripts/check_status.py <job-name> --wait
-python scripts/get_results.py <job-name> --output results.jsonl
+node scripts/create_batch.js requests.jsonl
+node scripts/check_status.js <job-name> --wait
+node scripts/get_results.js <job-name> --output results.jsonl
 
 # With model and name
-python scripts/create_batch.py requests.jsonl --model gemini-3-flash-preview --name "my-job"
+node scripts/create_batch.js requests.jsonl --model gemini-3-flash-preview --name "my-job"
 
 # Create JSONL programmatically
 echo '{"key":"1","request":{"contents":[{"parts":[{"text":"Prompt"}]}]}}' > batch.jsonl

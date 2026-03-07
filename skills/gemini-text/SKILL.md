@@ -23,7 +23,7 @@ Use this skill when you need to:
 
 ## Available Scripts
 
-### scripts/generate.py
+### scripts/generate.js
 **Purpose**: Full-featured text generation with all Gemini capabilities
 
 **When to use**:
@@ -53,28 +53,28 @@ Use this skill when you need to:
 
 ### Workflow 1: Basic Text Generation
 ```bash
-python scripts/generate.py "Explain quantum computing in simple terms"
+node scripts/generate.js "Explain quantum computing in simple terms"
 ```
 - Best for: Simple content creation, explanations, summaries
 - Model: `gemini-3-flash-preview` (default, fast)
 
 ### Workflow 2: With System Instruction (Persona)
 ```bash
-python scripts/generate.py "How do I read a file in Python?" --system "You are a helpful coding assistant"
+node scripts/generate.js "How do I read a file in Python?" --system "You are a helpful coding assistant"
 ```
 - Best for: Domain-specific tasks, expert personas, consistent tone
 - Use when: You need specific behavioral constraints
 
 ### Workflow 3: Complex Reasoning (Thinking Mode)
 ```bash
-python scripts/generate.py "Analyze the ethical implications of AI in healthcare" --thinking
+node scripts/generate.js "Analyze the ethical implications of AI in healthcare" --thinking
 ```
 - Best for: Complex analysis, step-by-step reasoning, multi-step problems
 - Use when: Task requires careful consideration and logical progression
 
 ### Workflow 4: Structured JSON Output
 ```bash
-python scripts/generate.py "Generate a user profile object with name, email, and preferences" --json
+node scripts/generate.js "Generate a user profile object with name, email, and preferences" --json
 ```
 - Best for: Data extraction, structured data generation, API responses
 - Output: Valid JSON ready for parsing
@@ -82,7 +82,7 @@ python scripts/generate.py "Generate a user profile object with name, email, and
 
 ### Workflow 5: Real-Time Information (Grounding)
 ```bash
-python scripts/generate.py "Who won the latest Super Bowl?" --grounding
+node scripts/generate.js "Who won the latest Super Bowl?" --grounding
 ```
 - Best for: Current events, news, factual information after training cutoff
 - Output: Response + grounding sources with citations
@@ -90,7 +90,7 @@ python scripts/generate.py "Who won the latest Super Bowl?" --grounding
 
 ### Workflow 6: Multimodal (Image Analysis)
 ```bash
-python scripts/generate.py "Describe what's in this image in detail" --image photo.png
+node scripts/generate.js "Describe what's in this image in detail" --image photo.png
 ```
 - Best for: Image captioning, visual analysis, image-based Q&A
 - Requires: Image file in PNG or JPEG format
@@ -100,7 +100,7 @@ python scripts/generate.py "Describe what's in this image in detail" --image pho
 ```bash
 # 1. Create batch requests (gemini-batch skill)
 # 2. Generate content
-python scripts/generate.py "Create a 500-word blog post about sustainable energy"
+node scripts/generate.js "Create a 500-word blog post about sustainable energy"
 # 3. Convert to audio (gemini-tts skill)
 ```
 - Best for: High-volume content production, podcasts, audiobooks
@@ -161,7 +161,7 @@ When `--grounding` is used, the script prints:
 
 ### "google-genai not installed"
 ```bash
-pip install google-genai
+npm install @google/genai@latest dotenv@latest
 ```
 
 ### "API key not set"
@@ -230,22 +230,22 @@ export GEMINI_API_KEY="your-key-here"
 
 ```bash
 # Basic
-python scripts/generate.py "Your prompt"
+node scripts/generate.js "Your prompt"
 
 # Persona
-python scripts/generate.py "Prompt" --system "You are X"
+node scripts/generate.js "Prompt" --system "You are X"
 
 # Thinking
-python scripts/generate.py "Complex task" --thinking
+node scripts/generate.js "Complex task" --thinking
 
 # JSON
-python scripts/generate.py "Generate JSON" --json
+node scripts/generate.js "Generate JSON" --json
 
 # Search
-python scripts/generate.py "Current event" --grounding
+node scripts/generate.js "Current event" --grounding
 
 # Multimodal
-python scripts/generate.py "Describe this" --image photo.png
+node scripts/generate.js "Describe this" --image photo.png
 ```
 
 ## Reference

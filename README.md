@@ -35,7 +35,7 @@ GEMINI_API_KEY=your-api-key
 ### 3. Install SDK
 
 ```bash
-pip install google-genai
+npm install @google/genai@latest dotenv@latest
 ```
 
 ## Usage with AI Agents
@@ -96,20 +96,20 @@ Browse the full directory of available skills and see community rankings at [ski
 
 ### Manual Usage
 
-Each skill contains standalone Python scripts that can be run directly:
+Each skill contains standalone JavaScript scripts that can be run directly:
 
 ```bash
 # Text generation
-python skills/gemini-text/scripts/generate.py "Explain quantum computing"
+node skills/gemini-text/scripts/generate.js "Explain quantum computing"
 
 # Image generation
-python skills/gemini-image/scripts/generate_image.py "A sunset over mountains"
+node skills/gemini-image/scripts/generate_image.js "A sunset over mountains"
 
 # Text-to-speech
-python skills/gemini-tts/scripts/tts.py "Hello world" --voice Kore
+node skills/gemini-tts/scripts/tts.js "Hello world" --voice Kore
 
 # Embeddings
-python skills/gemini-embeddings/scripts/embed.py "semantic search query"
+node skills/gemini-embeddings/scripts/embed.js "semantic search query"
 ```
 
 ## Default Models (January 2026)
@@ -117,7 +117,7 @@ python skills/gemini-embeddings/scripts/embed.py "semantic search query"
 | Capability | Default Model                  | Notes                     |
 | ---------- | ------------------------------ | ------------------------- |
 | Text       | `gemini-3-flash-preview`       | Fast, agentic, multimodal |
-| Image      | `gemini-3-pro-image-preview`   | Up to 4K resolution       |
+| Image      | `gemini-3.1-flash-image-preview` | Nano Banana 2 default (up to 4K) |
 | TTS        | `gemini-2.5-flash-preview-tts` | Multiple voices           |
 | Embeddings | `gemini-embedding-001`         | 3072 dimensions           |
 
@@ -128,8 +128,8 @@ Each skill follows the Agent Skills specification:
 ```
 skills/gemini-text/
 ├── SKILL.md           # Instructions for AI agents
-├── scripts/           # Executable Python scripts
-│   └── generate.py
+├── scripts/           # Executable JavaScript scripts
+│   └── generate.js
 └── references/        # Additional documentation
     └── models.md
 ```
@@ -141,8 +141,8 @@ skills/gemini-text/
 python3 -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies
-pip install google-genai
+# Install dependencies for a skill script
+cd skills/gemini-text/scripts && npm install
 
 # Format code
 ruff format skills/

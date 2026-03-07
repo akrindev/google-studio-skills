@@ -24,7 +24,7 @@ Use this skill when you need to:
 
 ## Available Scripts
 
-### scripts/generate_image.py
+### scripts/generate_image.js
 **Purpose**: Generate images using Gemini 3 Pro Image or Imagen 4 models
 
 **When to use**:
@@ -38,7 +38,7 @@ Use this skill when you need to:
 | Parameter | Description | Example |
 |-----------|-------------|---------|
 | `prompt` | Text description (required) | `"A futuristic city at sunset"` |
-| `--model`, `-m` | Model to use | `gemini-3-pro-image-preview` |
+| `--model`, `-m` | Model to use | `gemini-3.1-flash-image-preview` |
 | `--output-dir`, `-o` | Output directory for images | `images/` |
 | `--name`, `-n` | Base name for output files | `artwork` |
 | `--no-timestamp` | Disable auto timestamp | Flag |
@@ -53,15 +53,15 @@ Use this skill when you need to:
 
 ### Workflow 1: Basic Image Generation
 ```bash
-python scripts/generate_image.py "A futuristic city at sunset with flying cars"
+node scripts/generate_image.js "A futuristic city at sunset with flying cars"
 ```
 - Best for: Quick image generation, prototypes
-- Model: `gemini-3-pro-image-preview` (default, highest quality)
+- Model: `gemini-3.1-flash-image-preview` (default, Nano Banana 2)
 - Output: `images/generated_image_YYYYMMDD_HHMMSS.png`
 
 ### Workflow 2: Social Media (Instagram, Facebook)
 ```bash
-python scripts/generate_image.py "Minimalist coffee shop interior" --aspect 1:1 --size 2K --name coffee-shop
+node scripts/generate_image.js "Minimalist coffee shop interior" --aspect 1:1 --size 2K --name coffee-shop
 ```
 - Best for: Instagram posts, profile pictures
 - Aspect: 1:1 (square format)
@@ -70,7 +70,7 @@ python scripts/generate_image.py "Minimalist coffee shop interior" --aspect 1:1 
 
 ### Workflow 3: YouTube Thumbnails (16:9)
 ```bash
-python scripts/generate_image.py "Tech gadget review thumbnail with vibrant colors" --aspect 16:9 --size 2K --name thumbnail
+node scripts/generate_image.js "Tech gadget review thumbnail with vibrant colors" --aspect 16:9 --size 2K --name thumbnail
 ```
 - Best for: YouTube, video thumbnails
 - Aspect: 16:9 (widescreen)
@@ -79,7 +79,7 @@ python scripts/generate_image.py "Tech gadget review thumbnail with vibrant colo
 
 ### Workflow 4: Multiple Variations
 ```bash
-python scripts/generate_image.py "Abstract geometric patterns in blue and gold" --num 4 --name abstract
+node scripts/generate_image.js "Abstract geometric patterns in blue and gold" --num 4 --name abstract
 ```
 - Best for: A/B testing, design options
 - Generates: 4 distinct variations
@@ -87,16 +87,16 @@ python scripts/generate_image.py "Abstract geometric patterns in blue and gold" 
 
 ### Workflow 5: Custom Output Directory
 ```bash
-python scripts/generate_image.py "Detailed architectural rendering of modern museum" --aspect 16:9 --size 4K --output-dir ./professional/ --name museum
+node scripts/generate_image.js "Detailed architectural rendering of modern museum" --aspect 16:9 --size 4K --output-dir ./professional/ --name museum
 ```
 - Best for: Print materials, high-end assets, organized projects
-- Model: `gemini-3-pro-image-preview` only (for 4K)
+- Model: `gemini-3.1-flash-image-preview` or `gemini-3-pro-image-preview` (for 4K)
 - Resolution: 4K (5504x3072 for 16:9)
 - Directory created automatically if it doesn't exist
 
 ### Workflow 6: Photorealistic Images (Imagen 4)
 ```bash
-python scripts/generate_image.py "Robot holding a red skateboard in urban setting" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --num 2 --name robot-skate
+node scripts/generate_image.js "Robot holding a red skateboard in urban setting" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --num 2 --name robot-skate
 ```
 - Best for: Realistic photos, product shots
 - Model: `imagen-4.0-generate-001` (photorealistic)
@@ -105,7 +105,7 @@ python scripts/generate_image.py "Robot holding a red skateboard in urban settin
 
 ### Workflow 7: Blog Post Featured Image
 ```bash
-python scripts/generate_image.py "Serene mountain lake at sunrise with reflections" --aspect 16:9 --size 2K --output-dir ./blog-images/ --name featured-image
+node scripts/generate_image.js "Serene mountain lake at sunrise with reflections" --aspect 16:9 --size 2K --output-dir ./blog-images/ --name featured-image
 ```
 - Best for: Blog headers, article images
 - Combines well with: gemini-text for blog content generation
@@ -113,10 +113,10 @@ python scripts/generate_image.py "Serene mountain lake at sunrise with reflectio
 ### Workflow 8: Content Creation Pipeline (Text + Image)
 ```bash
 # 1. Generate content (gemini-text skill)
-python skills/gemini-text/scripts/generate.py "Write a product description for smart home device"
+node skills/gemini-text/scripts/generate.js "Write a product description for smart home device"
 
 # 2. Generate product image (this skill)
-python scripts/generate_image.py "Sleek modern smart home device on white background" --aspect 4:3 --size 2K --name product
+node scripts/generate_image.js "Sleek modern smart home device on white background" --aspect 4:3 --size 2K --name product
 
 # 3. Create social media post
 ```
@@ -125,7 +125,7 @@ python scripts/generate_image.py "Sleek modern smart home device on white backgr
 
 ### Workflow 9: Disable Timestamp
 ```bash
-python scripts/generate_image.py "Fixed filename image" --name my-image --no-timestamp
+node scripts/generate_image.js "Fixed filename image" --name my-image --no-timestamp
 ```
 - Best for: When you want complete control over filename
 - Output: `images/my-image.png` (no timestamp)
@@ -137,7 +137,8 @@ python scripts/generate_image.py "Fixed filename image" --name my-image --no-tim
 
 | Model | Nickname | Quality | Max Size | Best For |
 |-------|----------|---------|----------|----------|
-| `gemini-3-pro-image-preview` | Nano Banana Pro | Highest | 4K | Professional assets, advanced text rendering |
+| `gemini-3.1-flash-image-preview` | Nano Banana 2 | Pro-level | 4K | New default, fast + strong quality |
+| `gemini-3-pro-image-preview` | Nano Banana Pro | Highest | 4K | Maximum quality and complex text rendering |
 | `gemini-2.5-flash-image` | Nano Banana | Good | 2K | High-volume, low-latency |
 | `imagen-4.0-generate-001` | Imagen 4 | Photorealistic | 2K | Realistic photos, product shots |
 
@@ -152,7 +153,7 @@ python scripts/generate_image.py "Fixed filename image" --name my-image --no-tim
 | 3:4 | Portrait orientation | 768x1024 | 1536x2048 |
 | 21:9 | Ultrawide | - | 5504x2400 |
 
-Note: 4K resolution only available with `gemini-3-pro-image-preview`
+Note: 4K resolution is available with `gemini-3.1-flash-image-preview` and `gemini-3-pro-image-preview`
 
 ### Resolution Guide
 
@@ -194,7 +195,7 @@ Note: 4K resolution only available with `gemini-3-pro-image-preview`
 
 ### "google-genai or pillow not installed"
 ```bash
-pip install google-genai pillow
+cd scripts && npm install
 ```
 
 ### "Image generation failed"
@@ -209,13 +210,13 @@ pip install google-genai pillow
 - Use 16:9 or 1:1 for best compatibility
 
 ### "4K not supported"
-- 4K only works with `gemini-3-pro-image-preview`
-- Use `--size 2K` for other models
-- Try `--model gemini-3-pro-image-preview --size 4K`
+- 4K works best with `gemini-3.1-flash-image-preview` or `gemini-3-pro-image-preview`
+- Use `--size 2K` for older models
+- Try `--model gemini-3.1-flash-image-preview --size 4K`
 
 ### "Imagen prompt language error"
 - Imagen models support English prompts only
-- Use `gemini-3-pro-image-preview` for other languages
+- Use `gemini-3.1-flash-image-preview` for other languages
 - Translate prompt to English for Imagen
 
 ### File too large for storage
@@ -233,7 +234,8 @@ pip install google-genai pillow
 - Avoid negative prompts (describe what you want, not what to avoid)
 
 ### Model Selection
-- Use `gemini-3-pro-image-preview` for: High quality, text rendering, 4K
+- Use `gemini-3.1-flash-image-preview` for: Best default balance, quality, speed, 4K
+- Use `gemini-3-pro-image-preview` for: Maximum quality, complex text rendering
 - Use `gemini-2.5-flash-image` for: Speed, high volume
 - Use `imagen-4.0-generate-001` for: Photorealism, product shots
 
@@ -266,28 +268,28 @@ pip install google-genai pillow
 
 ```bash
 # Basic
-python scripts/generate_image.py "Your prompt"
+node scripts/generate_image.js "Your prompt"
 
 # Social media (1:1)
-python scripts/generate_image.py "Prompt" --aspect 1:1 --size 2K --name social-post
+node scripts/generate_image.js "Prompt" --aspect 1:1 --size 2K --name social-post
 
 # YouTube thumbnail (16:9)
-python scripts/generate_image.py "Prompt" --aspect 16:9 --size 2K --name thumbnail
+node scripts/generate_image.js "Prompt" --aspect 16:9 --size 2K --name thumbnail
 
 # 4K high quality
-python scripts/generate_image.py "Prompt" --aspect 16:9 --size 4K --name high-res
+node scripts/generate_image.js "Prompt" --aspect 16:9 --size 4K --name high-res
 
 # Multiple variations
-python scripts/generate_image.py "Prompt" --num 4 --name variations
+node scripts/generate_image.js "Prompt" --num 4 --name variations
 
 # Custom directory
-python scripts/generate_image.py "Prompt" --output-dir ./my-images/ --name custom
+node scripts/generate_image.js "Prompt" --output-dir ./my-images/ --name custom
 
 # Photorealistic
-python scripts/generate_image.py "Prompt" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --name photo
+node scripts/generate_image.js "Prompt" --model imagen-4.0-generate-001 --aspect 16:9 --size 2K --name photo
 
 # No timestamp
-python scripts/generate_image.py "Prompt" --name fixed-name --no-timestamp
+node scripts/generate_image.js "Prompt" --name fixed-name --no-timestamp
 ```
 
 ## Reference
